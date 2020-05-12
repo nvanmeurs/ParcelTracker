@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "ParcelTracker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "TrelloBoardId": "1",
+        "ParcelSource": "Json",
+        "ParcelDestination": "Json",
+        "DefaultDestinationCountry": "NL",
+        "DefaultPostalCode": "2288AE"
+      }
+    }
+  }
+}
