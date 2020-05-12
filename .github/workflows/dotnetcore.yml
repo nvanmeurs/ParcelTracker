@@ -13,6 +13,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Fetch all history for all tags and branches
+      run: git fetch --prune --unshallow
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.2
+      with:
+          versionSpec: '5.2.x'
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9.2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -24,15 +33,15 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Zip release
-      run: zip -j ParcelTracker-release-${{ github.ref }}.zip ./obj/Release/netcoreapp3.1/*
+      run: zip -j ParcelTracker-${{ steps.gitversion.outputs.semVer }}.zip ./bin/Release/netcoreapp3.1/*
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.gitversion.outputs.semVer }}
+        release_name: Release ${{ steps.gitversion.outputs.semVer }}
         draft: false
         prerelease: false
     - name: Upload Release Asset
@@ -41,7 +50,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./ParcelTracker-release-${{ github.ref }}.zip
-        asset_name: ParcelTracker-release-${{ github.ref }}.zip
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ParcelTracker-${{ steps.gitversion.outputs.semVer }}.zip
+        asset_name: ParcelTracker-${{ steps.gitversion.outputs.semVer }}.zip
         asset_content_type: application/zip
