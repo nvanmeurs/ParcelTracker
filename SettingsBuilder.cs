@@ -13,6 +13,8 @@ namespace ParcelTracker
                 ParcelSource = GetEnvVarEnum<ParcelSourceImplementation>("ParcelSource", true),
                 ParcelDestination = GetEnvVarEnum<ParcelDestinationImplementation>("ParcelDestination", true),
                 TrelloBoardId = GetEnvVar("TrelloBoardId"),
+                TrelloAppKey = GetEnvVar("TrelloAppKey"),
+                TrelloUserToken = GetEnvVar("TrelloUserToken"),
                 DefaultDestinationCountry = GetEnvVar("DefaultDestinationCountry"),
                 DefaultPostalCode = GetEnvVar("DefaultPostalCode")
             };

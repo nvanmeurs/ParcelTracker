@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ParcelTracker.source
 {
-    class TrelloParcelSource : IParcelSource
+    class JsonParcelSource : IParcelSource
     {
         public Task<List<ParcelDefinition>> GetParcels()
         {
